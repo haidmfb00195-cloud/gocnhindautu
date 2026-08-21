@@ -40,7 +40,7 @@ export default function ContactPage() {
             <ul className="flex flex-col gap-4">
               <li className="flex gap-3 text-text-secondary">
                 <Mail className="w-5 h-5 text-primary shrink-0" />
-                <span>admin@dungdautu.com</span>
+                <span>admin@gocnhindautu.com</span>
               </li>
               <li className="flex gap-3 text-text-secondary">
                 <Phone className="w-5 h-5 text-primary shrink-0" />

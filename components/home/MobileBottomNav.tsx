@@ -53,7 +53,7 @@ export default function MobileBottomNav() {
             <div className="space-y-4">
               <Link href="/tin-tuc" className="block text-xl font-medium text-text-secondary hover:text-primary py-2 border-b border-border" onClick={() => setMenuOpen(false)}>Tin tức</Link>
               <Link href="/kien-thuc/phan-tich-ky-thuat" className="block text-xl font-medium text-text-secondary hover:text-primary py-2 border-b border-border" onClick={() => setMenuOpen(false)}>Phân tích kỹ thuật</Link>
-              <Link href="/danh-gia-san" className="block text-xl font-medium text-text-secondary hover:text-primary py-2 border-b border-border" onClick={() => setMenuOpen(false)}>Đánh giá sàn Forex</Link>
+              
               <Link href="/so-sanh" className="block text-xl font-medium text-text-secondary hover:text-primary py-2 border-b border-border" onClick={() => setMenuOpen(false)}>So sánh sàn</Link>
               <Link href="/khoa-hoc" className="block text-xl font-medium text-text-secondary hover:text-primary py-2 border-b border-border" onClick={() => setMenuOpen(false)}>Khóa học</Link>
               <Link href="/lien-he" className="block text-xl font-medium text-text-secondary hover:text-primary py-2" onClick={() => setMenuOpen(false)}>Liên hệ</Link>

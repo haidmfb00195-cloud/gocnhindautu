@@ -8,7 +8,7 @@ export default function AffiliateBannerHorizontal() {
           </div>
           <div>
             <h3 className="text-white text-xl font-bold mb-1">MỞ TÀI KHOẢN GIAO DỊCH NGAY</h3>
-            <p className="text-gray-400 text-sm">Nhận ngay ưu đãi <span className="text-[#B6F500] font-bold px-2 py-0.5 bg-white/10 rounded">HOÀN PHÍ 20%</span> khi đăng ký qua link của Đừng Đầu Tư</p>
+            <p className="text-gray-400 text-sm">Nhận ngay ưu đãi <span className="text-[#B6F500] font-bold px-2 py-0.5 bg-white/10 rounded">HOÀN PHÍ 20%</span> khi đăng ký qua link của Góc Nhìn Đầu Tư</p>
           </div>
         </div>
         <a 

@@ -97,7 +97,7 @@ export default function CategorySidebar() {
           <div className="text-black text-xs font-mono">QR CODE</div>
         </div>
         <div className="bg-zinc-800 text-white rounded px-3 py-1 font-mono text-sm mb-4 border border-zinc-700">
-          DUNGDAUTU10
+          GOCNHINDAUTU10
         </div>
         <Link href="#" className="btn btn-primary w-full justify-center rounded-full text-black font-bold">
           ĐĂNG KÝ NGAY

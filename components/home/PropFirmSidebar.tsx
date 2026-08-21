@@ -74,7 +74,7 @@ export default function PropFirmSidebar() {
                   Tạo tài khoản <ExternalLink className="w-3.5 h-3.5" />
                 </Link>
                 <span className="text-[10px] text-text-tertiary text-center">
-                  Nhận hoa hồng qua Dungdautu
+                  Nhận hoa hồng qua Gocnhindautu
                 </span>
               </div>
             </div>

@@ -5,8 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 const adminNav = [
   { href: '/admin', label: '📊 Dashboard' },
   { href: '/admin/kien-thuc', label: '📝 Bài viết' },
-  { href: '/admin/danh-gia-san', label: '🏦 Đánh giá sàn' },
-  { href: '/admin/so-sanh', label: '⚖️ So sánh' },
+    { href: '/admin/so-sanh', label: '⚖️ So sánh' },
   { href: '/admin/media', label: '🖼 Media' },
   { href: '/admin/settings', label: '⚙️ Cài đặt' },
 ];
@@ -36,7 +35,7 @@ export default async function AdminLayout({
       <aside className="w-60 flex-shrink-0 border-r border-gray-800 bg-gray-900 flex flex-col">
         <div className="p-6 border-b border-gray-800">
           <Link href="/" className="text-sm font-bold text-white hover:text-emerald-400 transition-colors">
-            ← dungdautu.com
+            ← gocnhindautu.com
           </Link>
           <p className="mt-3 text-xs text-gray-500">
             Admin Panel

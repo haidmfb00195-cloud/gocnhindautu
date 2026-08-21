@@ -40,7 +40,7 @@ export default function Header() {
               ĐỪNG<br/><span className="text-primary">ĐẦU TƯ</span>
             </span>
           </div>
-          <span className="text-[10px] text-text-secondary hidden sm:block mt-0.5 ml-8">Đừng đầu tư trước khi bạn hiểu rõ điều này.</span>
+          <span className="text-[10px] text-text-secondary hidden sm:block mt-0.5 ml-8">Góc nhìn đầu tư trước khi bạn hiểu rõ điều này.</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

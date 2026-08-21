@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createStaticClient as createClient } from '@/lib/supabase/static';
 import { getFromR2 } from '@/lib/r2';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -89,12 +89,6 @@ export default async function ComparisonPage({ params }: Props) {
               {broker.rating !== null && (
                 <p className="text-emerald-400 font-semibold mt-1">{broker.rating}/10</p>
               )}
-              <a
-                href={`/danh-gia-san/${broker.slug}`}
-                className="mt-3 text-sm text-emerald-500 hover:text-emerald-400 block"
-              >
-                Xem đánh giá →
-              </a>
             </div>
           ))}
         </div>

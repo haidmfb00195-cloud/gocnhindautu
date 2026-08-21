@@ -23,7 +23,7 @@ export default function ArticleCard({ title, excerpt, date, imageUrl, slug, cate
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-white/10 font-bold text-xl">
-            DUNGDAUTU
+            GOCNHINDAUTU
           </div>
         )}
         <div className="absolute top-3 left-3 bg-black text-white text-xs font-semibold px-3 py-1 rounded-full z-10 shadow-md">

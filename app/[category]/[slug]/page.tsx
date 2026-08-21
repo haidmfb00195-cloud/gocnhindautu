@@ -30,7 +30,7 @@ export default function ArticleDetailPage({ params }: { params: { category: stri
 
       <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-foreground prose-a:text-primary hover:prose-a:text-primary-hover">
         <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-8 bg-gradient-dark-card border border-border flex items-center justify-center">
-          <span className="text-white/20 font-bold text-2xl">DUNGDAUTU.COM</span>
+          <span className="text-white/20 font-bold text-2xl">gocnhindautu.com</span>
         </div>
         <p className="lead text-xl text-text-secondary mb-6 font-medium">
           Hướng dẫn chi tiết cách quản lý vốn, tâm lý giao dịch và chiến lược hiệu quả để nhận tài khoản cấp vốn lên đến $200,000 từ các Prop Firm uy tín.

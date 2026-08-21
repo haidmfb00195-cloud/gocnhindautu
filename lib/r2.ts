@@ -20,7 +20,7 @@ const r2Client = new S3Client({
 });
 
 const BUCKET = process.env.R2_BUCKET_NAME!;
-const PUBLIC_URL = process.env.R2_PUBLIC_URL!; // e.g. https://cdn.dungdautu.com
+const PUBLIC_URL = process.env.R2_PUBLIC_URL!; // e.g. https://cdn.gocnhindautu.com
 
 // ── Upload ─────────────────────────────────────────────────────────────────
 

@@ -13,20 +13,20 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://dungdautu.com'),
+  metadataBase: new URL('https://gocnhindautu.com'),
   title: {
-    default: 'Đừng Đầu Tư — Kiến thức Trading & Phân tích Forex',
-    template: '%s | Đừng Đầu Tư',
+    default: 'Góc Nhìn Đầu Tư — Kiến thức Trading & Phân tích Forex',
+    template: '%s | Góc Nhìn Đầu Tư',
   },
   description:
     'Nền tảng kiến thức trading chuyên sâu: phân tích kỹ thuật, review sàn forex, so sánh broker uy tín và các khóa học đầu tư tài chính.',
   keywords: ['trading', 'forex', 'phân tích kỹ thuật', 'review sàn', 'đầu tư', 'prop firm', 'risk management'],
-  authors: [{ name: 'dungdautu.com' }],
+  authors: [{ name: 'gocnhindautu.com' }],
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
-    url: 'https://dungdautu.com',
-    siteName: 'Đừng Đầu Tư',
+    url: 'https://gocnhindautu.com',
+    siteName: 'Góc Nhìn Đầu Tư',
   },
   robots: {
     index: true,

@@ -16,7 +16,7 @@ export default function HeroSection() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-foreground leading-tight mb-6 text-balance">
-              Đừng đầu tư <span className="text-primary">Forex</span> nếu bạn chưa hiểu những điều này.
+              Góc nhìn đầu tư <span className="text-primary">Forex</span> nếu bạn chưa hiểu những điều này.
             </h1>
             
             <p className="text-lg text-text-secondary mb-10 max-w-2xl mx-auto lg:mx-0">
@@ -39,7 +39,7 @@ export default function HeroSection() {
             
             <Image 
               src="/images/mascot.png" 
-              alt="Dungdautu Mascot" 
+              alt="Gocnhindautu Mascot" 
               width={500} 
               height={500}
               className="relative z-10 object-contain w-full h-full"

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createStaticClient as createClient } from '@/lib/supabase/static';
 import { getFromR2 } from '@/lib/r2';
 import DOMPurify from 'isomorphic-dompurify';
 

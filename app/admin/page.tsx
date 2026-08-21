@@ -41,8 +41,7 @@ export default async function AdminDashboard() {
   const statCards = [
     { label: 'Tổng bài viết', value: stats.totalArticles ?? 0, href: '/admin/kien-thuc' },
     { label: 'Đã xuất bản', value: stats.publishedArticles ?? 0, href: '/admin/kien-thuc' },
-    { label: 'Đánh giá sàn', value: stats.totalBrokers ?? 0, href: '/admin/danh-gia-san' },
-    { label: 'So sánh', value: stats.totalComparisons ?? 0, href: '/admin/so-sanh' },
+        { label: 'So sánh', value: stats.totalComparisons ?? 0, href: '/admin/so-sanh' },
   ];
 
   return (

@@ -76,12 +76,12 @@ export default function Footer() {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="text-text-secondary text-xs">
-            © {year} Dungdautu. All rights reserved.
+            © {year} Gocnhindautu. All rights reserved.
           </div>
         </div>
 
         <div className="text-[10px] text-text-tertiary text-center leading-relaxed max-w-4xl mx-auto">
-          <span className="font-semibold text-text-secondary">Tuyên bố miễn trừ rủi ro:</span> Giao dịch ngoại hối (Forex), CFD và các sản phẩm tài chính có sử dụng đòn bẩy chứa đựng rủi ro cao và có thể không phù hợp với tất cả các nhà đầu tư. Bạn có thể mất một phần hoặc toàn bộ số vốn ban đầu của mình, vì vậy bạn không nên đầu tư số tiền mà bạn không thể chấp nhận mất. Nội dung trên website này chỉ mang tính chất cung cấp thông tin và kiến thức, không cấu thành lời khuyên đầu tư. Đừng Đầu Tư sẽ không chịu trách nhiệm pháp lý đối với bất kỳ tổn thất hoặc thiệt hại nào, bao gồm nhưng không giới hạn ở bất kỳ tổn thất lợi nhuận nào có thể phát sinh trực tiếp hoặc gián tiếp từ việc sử dụng hoặc phụ thuộc vào thông tin trên website này.
+          <span className="font-semibold text-text-secondary">Tuyên bố miễn trừ rủi ro:</span> Giao dịch ngoại hối (Forex), CFD và các sản phẩm tài chính có sử dụng đòn bẩy chứa đựng rủi ro cao và có thể không phù hợp với tất cả các nhà đầu tư. Bạn có thể mất một phần hoặc toàn bộ số vốn ban đầu của mình, vì vậy bạn không nên đầu tư số tiền mà bạn không thể chấp nhận mất. Nội dung trên website này chỉ mang tính chất cung cấp thông tin và kiến thức, không cấu thành lời khuyên đầu tư. Góc Nhìn Đầu Tư sẽ không chịu trách nhiệm pháp lý đối với bất kỳ tổn thất hoặc thiệt hại nào, bao gồm nhưng không giới hạn ở bất kỳ tổn thất lợi nhuận nào có thể phát sinh trực tiếp hoặc gián tiếp từ việc sử dụng hoặc phụ thuộc vào thông tin trên website này.
         </div>
       </div>
     </footer>

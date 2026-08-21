@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-          <p className="mt-1 text-sm text-gray-400">dungdautu.com</p>
+          <p className="mt-1 text-sm text-gray-400">gocnhindautu.com</p>
         </div>
 
         <form
@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
               autoComplete="email"
               disabled={loading}
               className="w-full rounded-lg bg-gray-800 border border-gray-700 px-4 py-2.5 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none disabled:opacity-50"
-              placeholder="admin@dungdautu.com"
+              placeholder="admin@gocnhindautu.com"
             />
           </div>
 

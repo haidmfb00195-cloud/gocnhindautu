@@ -4,7 +4,7 @@ export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: 'Về chúng tôi',
-  description: 'Tìm hiểu về dungdautu.com — nền tảng kiến thức trading và phân tích forex.',
+  description: 'Tìm hiểu về gocnhindautu.com — nền tảng kiến thức trading và phân tích forex.',
 };
 
 export default function VeChungToiPage() {
@@ -13,7 +13,7 @@ export default function VeChungToiPage() {
       <h1 className="text-3xl font-bold text-white mb-6">Về chúng tôi</h1>
       <div className="prose prose-invert prose-emerald max-w-none">
         <p>
-          <strong className="text-white">dungdautu.com</strong> là nền tảng cung cấp kiến thức
+          <strong className="text-white">gocnhindautu.com</strong> là nền tảng cung cấp kiến thức
           trading và phân tích tài chính độc lập, được xây dựng bởi cộng đồng trader Việt Nam.
         </p>
         <h2>Sứ mệnh</h2>
@@ -31,7 +31,7 @@ export default function VeChungToiPage() {
         </ul>
         <h2>Tuyên bố miễn trách</h2>
         <p>
-          Toàn bộ nội dung trên dungdautu.com chỉ mang tính chất tham khảo và giáo dục.
+          Toàn bộ nội dung trên gocnhindautu.com chỉ mang tính chất tham khảo và giáo dục.
           Không có nội dung nào được xem là lời khuyên đầu tư tài chính.
           Giao dịch ngoại hối có rủi ro cao, bạn có thể mất toàn bộ vốn đầu tư.
         </p>

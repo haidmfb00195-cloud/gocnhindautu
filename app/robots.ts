@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/admin/', '/admin/*', '/api/'],
       },
     ],
-    sitemap: 'https://dungdautu.com/sitemap.xml',
-    host: 'https://dungdautu.com',
+    sitemap: 'https://gocnhindautu.com/sitemap.xml',
+    host: 'https://gocnhindautu.com',
   };
 }

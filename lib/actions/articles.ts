@@ -3,6 +3,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server';
 import { uploadToR2, deleteFromR2, makeArticleKey } from '@/lib/r2';
 import { triggerRevalidate, logAdminAction } from '@/lib/actions/revalidate';
+import { stripZeroWidth } from '@/lib/utils/text';
 import DOMPurify from 'isomorphic-dompurify';
 import { revalidatePath } from 'next/cache';
 
@@ -22,14 +23,31 @@ async function requireAdmin() {
   return { user, supabase };
 }
 
+// Sanitize + strip zero-width chars in one place, shared by create/update.
+// ZWSP (\u200B etc.) is a valid unicode char DOMPurify does NOT strip on
+// its own — it's not an XSS vector, just invisible junk — so we strip it
+// explicitly BEFORE sanitizing. This is the fix for the Vietnamese
+// word-break bug seen earlier on cokhiapec.com; see lib/utils/text.ts.
+function sanitizeArticleHtml(rawHtml: string): string {
+  const cleaned = stripZeroWidth(rawHtml);
+  return DOMPurify.sanitize(cleaned, {
+    ALLOWED_TAGS: ['h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
+                   'strong','em','a','code','pre','img','table','thead','tbody',
+                   'tr','td','th','br','hr','figure','figcaption'],
+    ALLOWED_ATTR: ['href','src','alt','class','id','target','rel','title'],
+  });
+}
+
 // ── Create Article ────────────────────────────────────────────────────────────
 export async function createArticleAction(formData: FormData) {
   const { user, supabase } = await requireAdmin();
 
-  const title = formData.get('title') as string;
-  const slug = formData.get('slug') as string;
+  const title = stripZeroWidth((formData.get('title') as string) ?? '');
+  const slug = stripZeroWidth((formData.get('slug') as string) ?? '');
   const categoryId = formData.get('category_id') as string | null;
-  const metaDescription = formData.get('meta_description') as string | null;
+  const metaDescription = stripZeroWidth((formData.get('meta_description') as string) ?? '') || null;
+  const keywordsRaw = stripZeroWidth((formData.get('keywords') as string) ?? '') || null;
+  const coverImageUrl = (formData.get('cover_image_url') as string) || null;
   const rawHtml = formData.get('content_html') as string;
   const status = (formData.get('status') as 'draft' | 'published') ?? 'draft';
 
@@ -37,13 +55,7 @@ export async function createArticleAction(formData: FormData) {
     return { error: 'Thiếu thông tin bắt buộc: title, slug, content' };
   }
 
-  // Sanitize HTML before storing to R2 (XSS prevention)
-  const safeHtml = DOMPurify.sanitize(rawHtml, {
-    ALLOWED_TAGS: ['h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
-                   'strong','em','a','code','pre','img','table','thead','tbody',
-                   'tr','td','th','br','hr','figure','figcaption'],
-    ALLOWED_ATTR: ['href','src','alt','class','id','target','rel','title'],
-  });
+  const safeHtml = sanitizeArticleHtml(rawHtml);
 
   // Upload sanitized HTML to R2
   const r2Key = makeArticleKey(slug);
@@ -66,7 +78,9 @@ export async function createArticleAction(formData: FormData) {
       author_id: user.id,
       r2_key: r2Key,
       status,
-      meta_description: metaDescription || null,
+      meta_description: metaDescription,
+      keywords: keywordsRaw,
+      cover_image_url: coverImageUrl,
       published_at: status === 'published' ? new Date().toISOString() : null,
     })
     .select('id, slug, categories(slug)')
@@ -104,10 +118,12 @@ export async function updateArticleAction(formData: FormData) {
   const { user, supabase } = await requireAdmin();
 
   const id = formData.get('id') as string;
-  const title = formData.get('title') as string;
-  const slug = formData.get('slug') as string;
+  const title = stripZeroWidth((formData.get('title') as string) ?? '');
+  const slug = stripZeroWidth((formData.get('slug') as string) ?? '');
   const categoryId = formData.get('category_id') as string | null;
-  const metaDescription = formData.get('meta_description') as string | null;
+  const metaDescription = stripZeroWidth((formData.get('meta_description') as string) ?? '') || null;
+  const keywordsRaw = stripZeroWidth((formData.get('keywords') as string) ?? '') || null;
+  const coverImageUrl = (formData.get('cover_image_url') as string) || null;
   const rawHtml = formData.get('content_html') as string;
   const status = formData.get('status') as 'draft' | 'published';
 
@@ -128,12 +144,7 @@ export async function updateArticleAction(formData: FormData) {
 
   // If content changed, upload new version to R2
   if (rawHtml) {
-    const safeHtml = DOMPurify.sanitize(rawHtml, {
-      ALLOWED_TAGS: ['h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
-                     'strong','em','a','code','pre','img','table','thead','tbody',
-                     'tr','td','th','br','hr','figure','figcaption'],
-      ALLOWED_ATTR: ['href','src','alt','class','id','target','rel','title'],
-    });
+    const safeHtml = sanitizeArticleHtml(rawHtml);
     r2Key = makeArticleKey(slug);
     await uploadToR2(r2Key, safeHtml, 'text/html; charset=utf-8');
 
@@ -154,7 +165,9 @@ export async function updateArticleAction(formData: FormData) {
       category_id: categoryId || null,
       r2_key: r2Key,
       status,
-      meta_description: metaDescription || null,
+      meta_description: metaDescription,
+      keywords: keywordsRaw,
+      cover_image_url: coverImageUrl,
       published_at: isPublishing && !wasPublished ? new Date().toISOString() : undefined,
     })
     .eq('id', id);

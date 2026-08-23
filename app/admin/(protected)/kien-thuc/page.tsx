@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { deleteArticleAction } from '@/lib/actions/articles';
+import DeleteButton from '@/components/admin/DeleteButton';
 
 export const metadata: Metadata = { title: 'Quản lý bài viết | Admin' };
 
@@ -73,17 +74,10 @@ export default async function AdminArticlesPage() {
                       >
                         Sửa
                       </Link>
-                      <form action={deleteArticleAction.bind(null, article.id) as any}>
-                        <button
-                          type="submit"
-                          className="text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
-                          onClick={(e) => {
-                            if (!confirm(`Xóa bài "${article.title}"?`)) e.preventDefault();
-                          }}
-                        >
-                          Xóa
-                        </button>
-                      </form>
+                      <DeleteButton
+                        action={deleteArticleAction.bind(null, article.id) as any}
+                        confirmMessage={`Xóa bài "${article.title}"?`}
+                      />
                     </div>
                   </td>
                 </tr>

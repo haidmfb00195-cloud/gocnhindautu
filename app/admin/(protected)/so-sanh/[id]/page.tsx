@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getFromR2 } from '@/lib/r2';
 import { updateComparisonAction, deleteComparisonAction } from '@/lib/actions/comparisons';
+import DeleteButton from '@/components/admin/DeleteButton';
 
 export const metadata: Metadata = { title: 'Chỉnh sửa so sánh | Admin' };
 
@@ -53,18 +54,12 @@ export default async function EditComparisonPage({ params }: Props) {
           <a href="/admin/so-sanh" className="text-sm text-gray-400 hover:text-white">← Danh sách so sánh</a>
           <h1 className="text-2xl font-bold text-white mt-2">Chỉnh sửa so sánh</h1>
         </div>
-        
-        <form action={deleteComparisonAction.bind(null, comparison.id) as any}>
-          <button
-            type="submit"
-            className="rounded-lg bg-red-950/40 border border-red-900/50 hover:bg-red-900/30 text-red-400 px-4 py-2 text-sm font-semibold transition-colors"
-            onClick={(e) => {
-              if (!confirm(`Bạn chắc chắn muốn xóa bài so sánh này?`)) e.preventDefault();
-            }}
-          >
-            Xóa so sánh
-          </button>
-        </form>
+
+        <DeleteButton
+          action={deleteComparisonAction.bind(null, comparison.id) as any}
+          confirmMessage="Bạn chắc chắn muốn xóa bài so sánh này?"
+          label="Xóa so sánh"
+        />
       </div>
 
       <form action={updateComparisonAction as any} className="space-y-6">

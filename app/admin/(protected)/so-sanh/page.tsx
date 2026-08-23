@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { deleteComparisonAction } from '@/lib/actions/comparisons';
+import DeleteButton from '@/components/admin/DeleteButton';
 
 export const metadata: Metadata = { title: 'Quản lý so sánh | Admin' };
 
@@ -68,17 +69,10 @@ export default async function AdminComparisonsPage() {
                       >
                         Sửa
                       </Link>
-                      <form action={deleteComparisonAction.bind(null, c.id) as any}>
-                        <button
-                          type="submit"
-                          className="text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
-                          onClick={(e) => {
-                            if (!confirm(`Xóa bài so sánh này?`)) e.preventDefault();
-                          }}
-                        >
-                          Xóa
-                        </button>
-                      </form>
+                      <DeleteButton
+                        action={deleteComparisonAction.bind(null, c.id) as any}
+                        confirmMessage="Xóa bài so sánh này?"
+                      />
                     </div>
                   </td>
                 </tr>

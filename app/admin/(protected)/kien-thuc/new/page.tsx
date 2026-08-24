@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { createArticleAction } from '@/lib/actions/articles';
+import QuillEditor from '@/components/admin/QuillEditor';
+import CoverImageInput from '@/components/admin/CoverImageInput';
 
 export const metadata: Metadata = { title: 'Tạo bài viết mới | Admin' };
 
@@ -48,7 +50,7 @@ export default async function NewArticlePage() {
               name="slug"
               type="text"
               required
-              pattern="[a-z0-9-]+"
+              pattern="[a-z0-9\-]+"
               className="w-full rounded-lg bg-gray-800 border border-gray-700 px-4 py-2.5 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none"
               placeholder="ten-bai-viet"
             />
@@ -87,6 +89,13 @@ export default async function NewArticlePage() {
         </div>
 
         <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Ảnh bìa
+          </label>
+          <CoverImageInput name="cover_image_url" />
+        </div>
+
+        <div>
           <label htmlFor="article-meta" className="block text-sm font-medium text-gray-300 mb-1">
             Meta Description
           </label>
@@ -101,18 +110,25 @@ export default async function NewArticlePage() {
         </div>
 
         <div>
-          <label htmlFor="article-content" className="block text-sm font-medium text-gray-300 mb-1">
-            Nội dung HTML <span className="text-red-400">*</span>
+          <label htmlFor="article-keywords" className="block text-sm font-medium text-gray-300 mb-1">
+            Keywords
+            <span className="text-xs text-gray-500 ml-2">(phân cách bằng dấu phẩy)</span>
+          </label>
+          <input
+            id="article-keywords"
+            name="keywords"
+            type="text"
+            className="w-full rounded-lg bg-gray-800 border border-gray-700 px-4 py-2.5 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none"
+            placeholder="forex, exness, review san giao dich"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">
+            Nội dung <span className="text-red-400">*</span>
             <span className="text-xs text-gray-500 ml-2">(HTML sẽ được sanitize tự động trước khi lưu)</span>
           </label>
-          <textarea
-            id="article-content"
-            name="content_html"
-            rows={20}
-            required
-            className="w-full rounded-lg bg-gray-800 border border-gray-700 px-4 py-3 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none font-mono text-sm resize-y"
-            placeholder="<h2>Tiêu đề</h2>&#10;<p>Nội dung bài viết...</p>"
-          />
+          <QuillEditor name="content_html" placeholder="Viết nội dung bài viết ở đây..." />
         </div>
 
         <div className="flex gap-3">

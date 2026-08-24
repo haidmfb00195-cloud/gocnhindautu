@@ -7,7 +7,7 @@ import DOMPurify from 'isomorphic-dompurify';
 export const dynamic = 'force-static';
 
 interface Props {
-  params: { category: string; slug: string };
+  params: { categorySlug: string; slug: string };
 }
 
 export async function generateStaticParams() {
@@ -16,51 +16,52 @@ export async function generateStaticParams() {
     .from('articles')
     .select('slug, categories(slug)')
     .eq('status', 'published');
-
-  return (data ?? []).map((a: any) => ({
-    category: a.categories?.slug ?? 'chung',
-    slug: a.slug,
-  }));
+  return (data ?? [])
+    .filter((a: any) => a.categories?.slug)
+    .map((a: any) => ({ categorySlug: a.categories.slug, slug: a.slug }));
 }
 
-async function getArticle(slug: string) {
+async function getArticle(categorySlug: string, slug: string) {
   const supabase = createClient();
   const { data } = await supabase
     .from('articles')
-    .select('id, slug, title, meta_description, r2_key, published_at, updated_at, categories(slug, name)')
+    .select(
+      'id, title, slug, r2_key, meta_description, keywords, cover_image_url, published_at, updated_at, categories!inner(slug, name)'
+    )
     .eq('slug', slug)
     .eq('status', 'published')
+    .eq('categories.slug', categorySlug)
     .single();
   return data;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getArticle(params.slug);
+  const article = await getArticle(params.categorySlug, params.slug);
   if (!article) return { title: 'Bài viết không tồn tại' };
 
   return {
     title: article.title,
     description: article.meta_description ?? undefined,
+    keywords: article.keywords
+      ? article.keywords.split(',').map((k: string) => k.trim())
+      : undefined,
     openGraph: {
       title: article.title,
       description: article.meta_description ?? undefined,
+      images: article.cover_image_url ? [article.cover_image_url] : undefined,
       type: 'article',
       publishedTime: article.published_at ?? undefined,
-      modifiedTime: article.updated_at,
     },
   };
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const article = await getArticle(params.slug);
+  const article = await getArticle(params.categorySlug, params.slug);
   if (!article) notFound();
 
-  // Fetch article HTML body from R2
   let htmlContent = '';
   try {
     const raw = await getFromR2(article.r2_key);
-    // Sanitize HTML to prevent XSS — even though content was sanitized on write,
-    // we also sanitize on read for defense in depth.
     htmlContent = DOMPurify.sanitize(raw, {
       ALLOWED_TAGS: ['h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
                      'strong','em','a','code','pre','img','table','thead','tbody',
@@ -68,46 +69,40 @@ export default async function ArticlePage({ params }: Props) {
       ALLOWED_ATTR: ['href','src','alt','class','id','target','rel','title'],
     });
   } catch (err) {
-    console.error('[ArticlePage] Failed to fetch content from R2:', err);
-    htmlContent = '<p class="text-red-400">Không thể tải nội dung bài viết. Vui lòng thử lại sau.</p>';
+    console.error('[ArticlePage] R2 fetch error:', err);
   }
 
+  const categoryName = (article as any).categories?.name;
+
   return (
-    <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-6 flex gap-2">
-        <a href="/kien-thuc" className="hover:text-white">Kiến thức</a>
-        <span>/</span>
-        {(article as any).categories?.name && (
-          <>
-            <a href={`/kien-thuc/${params.category}`} className="hover:text-white">
-              {(article as any).categories.name}
-            </a>
-            <span>/</span>
-          </>
-        )}
-        <span className="text-gray-400 truncate">{article.title}</span>
-      </nav>
+    <article className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
+      {categoryName && (
+        <nav className="text-sm text-text-secondary mb-6">
+          <span>{categoryName}</span>
+        </nav>
+      )}
 
-      {/* Header */}
-      <header className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4">
-          {article.title}
-        </h1>
-        {article.published_at && (
-          <time className="text-sm text-gray-500" dateTime={article.published_at}>
-            Đăng ngày {new Date(article.published_at).toLocaleDateString('vi-VN', {
-              day: '2-digit', month: '2-digit', year: 'numeric'
-            })}
-          </time>
-        )}
-      </header>
+      {article.cover_image_url && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={article.cover_image_url}
+          alt={article.title}
+          className="w-full rounded-xl mb-8 aspect-[16/9] object-cover"
+        />
+      )}
 
-      {/* Content from R2 */}
-      <div
-        className="prose prose-invert prose-emerald max-w-none"
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-      />
+      <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-6">
+        {article.title}
+      </h1>
+
+      {htmlContent ? (
+        <div
+          className="prose prose-invert prose-emerald max-w-none"
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        />
+      ) : (
+        <p className="text-text-secondary">Không tải được nội dung bài viết.</p>
+      )}
     </article>
   );
 }

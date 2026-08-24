@@ -1,17 +1,27 @@
+import { createStaticClient as createClient } from '@/lib/supabase/static';
 import HeroBanner from '@/components/home/HeroBanner';
 import SidebarLatestPopular from '@/components/home/SidebarLatestPopular';
 import AffiliateBannerHorizontal from '@/components/home/AffiliateBannerHorizontal';
 import AffiliateGrid from '@/components/home/AffiliateGrid';
 import ArticleCard from '@/components/ui/ArticleCard';
+import { formatDateVN } from '@/lib/utils/date';
 
-const MOCK_ARTICLES = [
-  { id: 1, title: 'Hướng dẫn Price Action cơ bản', excerpt: 'Tất tần tật về Price Action giúp bạn nắm bắt cơ hội giao dịch.', date: '04 Th08 2026', imageUrl: '', slug: 'price-action-co-ban', categorySlug: 'kien-thuc' },
-  { id: 2, title: 'So sánh FTMO và The5ers', excerpt: 'Quỹ nào phù hợp với phong cách giao dịch của bạn nhất?', date: '01 Th08 2026', imageUrl: '', slug: 'so-sanh-ftmo-the5ers', categorySlug: 'trade-quy' },
-  { id: 3, title: 'Top 3 sàn Forex phí thấp nhất', excerpt: 'Đánh giá các sàn Forex có spread và commission thấp nhất.', date: '28 Th07 2026', imageUrl: '', slug: 'top-3-san-forex', categorySlug: 'san-giao-dich' },
-  { id: 4, title: 'Quản lý vốn Kelly Criterion', excerpt: 'Công thức toán học áp dụng vào trading để tối đa hoá lợi nhuận.', date: '25 Th07 2026', imageUrl: '', slug: 'quan-ly-von-kelly', categorySlug: 'kien-thuc' },
-];
+export const dynamic = 'force-static';
 
-export default function Home() {
+async function getLatestArticles() {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from('articles')
+    .select('id, title, slug, meta_description, cover_image_url, published_at, categories(slug)')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(8);
+  return data ?? [];
+}
+
+export default async function Home() {
+  const articles = await getLatestArticles();
+
   return (
     <>
       <section className="section py-8">
@@ -37,11 +47,23 @@ export default function Home() {
             <span className="w-1 h-6 bg-primary rounded-full inline-block"></span>
             Bài viết mới nhất
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {MOCK_ARTICLES.map(article => (
-              <ArticleCard key={article.id} {...article} />
-            ))}
-          </div>
+          {articles.length === 0 ? (
+            <p className="text-text-secondary text-center py-12">Chưa có bài viết nào được xuất bản.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {articles.map((article: any) => (
+                <ArticleCard
+                  key={article.id}
+                  title={article.title}
+                  excerpt={article.meta_description ?? ''}
+                  date={formatDateVN(article.published_at)}
+                  imageUrl={article.cover_image_url ?? ''}
+                  slug={article.slug}
+                  categorySlug={article.categories?.slug ?? 'kien-thuc'}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

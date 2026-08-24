@@ -12,7 +12,7 @@ interface ArticleCardProps {
 
 export default function ArticleCard({ title, excerpt, date, imageUrl, slug, categorySlug }: ArticleCardProps) {
   return (
-    <Link href={`/${categorySlug}/${slug}`} className="group flex flex-col gap-3">
+    <Link href={`/kien-thuc/${categorySlug}/${slug}`} className="group flex flex-col gap-3">
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gradient-dark-card border border-border">
         {imageUrl ? (
           <Image 

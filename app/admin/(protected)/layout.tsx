@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 
 const adminNav = [
   { href: '/admin', label: '📊 Dashboard' },
-  { href: '/admin/kien-thuc', label: '📝 Bài viết' },
-    { href: '/admin/so-sanh', label: '⚖️ So sánh' },
+  { href: '/admin/bai-viet/kien-thuc', label: '📝 Bài viết' },
+  { href: '/admin/so-sanh', label: '⚖️ So sánh' },
   { href: '/admin/media', label: '🖼 Media' },
   { href: '/admin/settings', label: '⚙️ Cài đặt' },
 ];

@@ -1,10 +1,15 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Search, Mail, Shield, ChevronDown, Menu, Moon, Sun } from 'lucide-react';
 
-export default function Header() {
+type HeaderProps = {
+  logoUrl?: string;
+};
+
+export default function Header({ logoUrl }: HeaderProps) {
   const [theme, setTheme] = useState('light');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -35,12 +40,29 @@ export default function Header() {
       <div className="container h-full mx-auto flex max-w-content items-center justify-between">
         <Link href="/" className="flex flex-col">
           <div className="flex items-center gap-2">
-            <Shield className="text-primary w-6 h-6" />
-            <span className="text-xl font-bold tracking-tight text-foreground hover:text-primary transition-colors">
-              GÓC NHÌN ĐẦU TƯ
-            </span>
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt="Góc Nhìn Đầu Tư"
+                width={160}
+                height={40}
+                className="h-8 w-auto object-contain"
+                unoptimized
+              />
+            ) : (
+              <>
+                <Shield className="text-primary w-6 h-6" />
+                <span className="text-xl font-bold tracking-tight text-foreground hover:text-primary transition-colors">
+                  GÓC NHÌN ĐẦU TƯ
+                </span>
+              </>
+            )}
           </div>
-          <span className="text-[10px] text-text-secondary hidden sm:block mt-0.5 ml-8">Góc nhìn đầu tư trước khi bạn hiểu rõ điều này.</span>
+          {!logoUrl && (
+            <span className="text-[10px] text-text-secondary hidden sm:block mt-0.5 ml-8">
+              Góc nhìn đầu tư trước khi bạn hiểu rõ điều này.
+            </span>
+          )}
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

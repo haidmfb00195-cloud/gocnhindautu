@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import MobileBottomNav from '@/components/home/MobileBottomNav';
+import { getSiteConfig } from '@/lib/site-config';
 
 const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
@@ -35,11 +36,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const siteConfig = await getSiteConfig();
+
   return (
     <html lang="vi" suppressHydrationWarning>
       <head>
@@ -60,9 +63,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${beVietnamPro.className} antialiased`}>
-        <Header />
+        <Header logoUrl={siteConfig.logo_url || undefined} />
         <main id="main-content">{children}</main>
-        <Footer />
+        <Footer
+          logo_url={siteConfig.logo_url}
+          facebook_url={siteConfig.facebook_url}
+          zalo_url={siteConfig.zalo_url}
+        />
         <MobileBottomNav />
       </body>
     </html>

@@ -37,7 +37,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <Shield className="text-primary w-6 h-6" />
             <span className="text-xl font-bold tracking-tight text-foreground hover:text-primary transition-colors">
-              GÓC NHÌN ĐẦU TƯ</span>
+              GÓC NHÌN ĐẦU TƯ
             </span>
           </div>
           <span className="text-[10px] text-text-secondary hidden sm:block mt-0.5 ml-8">Góc nhìn đầu tư trước khi bạn hiểu rõ điều này.</span>

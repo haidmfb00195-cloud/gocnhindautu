@@ -1,13 +1,24 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, forwardRef } from 'react';
 import dynamic from 'next/dynamic';
+import type ReactQuillType from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { createClient } from '@/lib/supabase/client';
 import { stripZeroWidth } from '@/lib/utils/text';
 
 // react-quill touches `document`, so it must never render on the server.
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+// Wrap with forwardRef shim so TypeScript accepts the `ref` prop.
+const ReactQuill = dynamic(
+  async () => {
+    const { default: RQ } = await import('react-quill');
+    // eslint-disable-next-line react/display-name
+    return forwardRef<ReactQuillType, React.ComponentProps<typeof RQ>>((props, ref) => (
+      <RQ {...props} ref={ref as any} />
+    ));
+  },
+  { ssr: false }
+);
 
 interface InternalLinkTarget {
   title: string;
@@ -23,7 +34,7 @@ interface QuillEditorProps {
 
 export default function QuillEditor({ name, defaultValue = '', placeholder }: QuillEditorProps) {
   const [html, setHtml] = useState(defaultValue);
-  const quillRef = useRef<any>(null);
+  const quillRef = useRef<ReactQuillType>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const savedRangeRef = useRef<{ index: number; length: number } | null>(null);
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import RevalidateForm from './RevalidateForm';
+import { BannerSettings } from './BannerSettings';
 
 export const metadata: Metadata = { title: 'Cài đặt | Admin' };
 
@@ -43,6 +44,8 @@ export default function AdminSettingsPage() {
           </p>
           <RevalidateForm />
         </div>
+
+        <BannerSettings />
       </div>
     </div>
   );

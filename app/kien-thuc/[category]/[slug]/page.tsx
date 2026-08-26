@@ -7,7 +7,7 @@ import DOMPurify from 'isomorphic-dompurify';
 export const dynamic = 'force-static';
 
 interface Props {
-  params: { categorySlug: string; slug: string };
+  params: { category: string; slug: string };
 }
 
 export async function generateStaticParams() {
@@ -18,11 +18,13 @@ export async function generateStaticParams() {
     .eq('status', 'published');
   return (data ?? [])
     .filter((a: any) => a.categories?.slug)
-    .map((a: any) => ({ categorySlug: a.categories.slug, slug: a.slug }));
+    .map((a: any) => ({ category: a.categories.slug, slug: a.slug }));
 }
 
-async function getArticle(categorySlug: string, slug: string) {
+async function getArticle(category: string, slug: string) {
   const supabase = createClient();
+  
+  // Lần 1: Cố gắng lấy bài viết match chính xác cả slug và category
   const { data } = await supabase
     .from('articles')
     .select(
@@ -30,13 +32,27 @@ async function getArticle(categorySlug: string, slug: string) {
     )
     .eq('slug', slug)
     .eq('status', 'published')
-    .eq('categories.slug', categorySlug)
-    .single();
-  return data;
+    .eq('categories.slug', category)
+    .maybeSingle();
+
+  if (data) return data;
+
+  // Lần 2 (Fallback): Nếu không tìm thấy (do sai category trên URL, ví dụ: 'chung' hoặc 'kien-thuc'),
+  // ta chỉ tìm theo slug bài viết. Điều này giúp link không bị 404 dù DB có gán category lỗi.
+  const { data: fallbackData } = await supabase
+    .from('articles')
+    .select(
+      'id, title, slug, r2_key, meta_description, keywords, cover_image_url, published_at, updated_at, categories(slug, name)'
+    )
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .maybeSingle();
+
+  return fallbackData;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getArticle(params.categorySlug, params.slug);
+  const article = await getArticle(params.category, params.slug);
   if (!article) return { title: 'Bài viết không tồn tại' };
 
   return {
@@ -56,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const article = await getArticle(params.categorySlug, params.slug);
+  const article = await getArticle(params.category, params.slug);
   if (!article) notFound();
 
   let htmlContent = '';

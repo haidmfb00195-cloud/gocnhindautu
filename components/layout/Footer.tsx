@@ -11,7 +11,7 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
               <Shield className="text-primary w-6 h-6" />
               <span className="text-xl font-bold tracking-tight text-foreground hover:text-primary transition-colors">
-                ĐỪNG<span className="text-primary"> ĐẦU TƯ</span>
+                GÓC NHÌN ĐẦU TƯ</span>
               </span>
             </Link>
             <p className="text-text-secondary leading-relaxed mb-6">

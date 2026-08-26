@@ -1,25 +1,24 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = { title: 'Admin Dashboard' };
 
 async function getDashboardStats() {
   const supabase = createClient();
+  const service = createServiceClient();
 
   const [
     { count: totalArticles },
     { count: publishedArticles },
-    { count: totalBrokers },
-    { count: totalComparisons },
+    { count: unreadMessages },
   ] = await Promise.all([
     supabase.from('articles').select('id', { count: 'exact', head: true }),
     supabase.from('articles').select('id', { count: 'exact', head: true }).eq('status', 'published'),
-    supabase.from('brokers').select('id', { count: 'exact', head: true }),
-    supabase.from('comparisons').select('id', { count: 'exact', head: true }),
+    service.from('contact_messages').select('id', { count: 'exact', head: true }).eq('is_read', false),
   ]);
 
-  return { totalArticles, publishedArticles, totalBrokers, totalComparisons };
+  return { totalArticles, publishedArticles, unreadMessages };
 }
 
 async function getRecentActions() {
@@ -39,9 +38,9 @@ export default async function AdminDashboard() {
   ]);
 
   const statCards = [
-    { label: 'Tổng bài viết', value: stats.totalArticles ?? 0, href: '/admin/kien-thuc' },
-    { label: 'Đã xuất bản', value: stats.publishedArticles ?? 0, href: '/admin/kien-thuc' },
-        { label: 'So sánh', value: stats.totalComparisons ?? 0, href: '/admin/so-sanh' },
+    { label: 'Tổng bài viết', value: stats.totalArticles ?? 0, href: '/admin/bai-viet/kien-thuc' },
+    { label: 'Đã xuất bản', value: stats.publishedArticles ?? 0, href: '/admin/bai-viet/kien-thuc' },
+    { label: 'Tin nhắn chưa đọc', value: stats.unreadMessages ?? 0, href: '/admin/tin-nhan' },
   ];
 
   return (
@@ -49,7 +48,7 @@ export default async function AdminDashboard() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>
         <Link
-          href="/admin/kien-thuc/new"
+          href="/admin/bai-viet/kien-thuc/new"
           className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-400 transition-colors"
         >
           + Bài viết mới

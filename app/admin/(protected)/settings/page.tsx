@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { SiteConfigForm } from './SiteConfigForm';
-import { BannerSettings } from './BannerSettings';
 
 export const metadata: Metadata = { title: 'Cài đặt website | Admin' };
 
@@ -10,7 +9,7 @@ export default function AdminSettingsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Cài đặt website</h1>
-          <p className="text-sm text-gray-500 mt-1">Logo, thông tin liên hệ và banner affiliate.</p>
+          <p className="text-sm text-gray-500 mt-1">Logo và thông tin liên hệ.</p>
         </div>
         <a
           href="/admin/settings/advanced"
@@ -20,12 +19,7 @@ export default function AdminSettingsPage() {
         </a>
       </div>
 
-      <div className="space-y-8">
-        <SiteConfigForm />
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-          <BannerSettings />
-        </div>
-      </div>
+      <SiteConfigForm />
     </div>
   );
 }

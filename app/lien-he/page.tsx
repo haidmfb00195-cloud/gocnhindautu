@@ -1,5 +1,6 @@
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { getSiteConfig } from '@/lib/site-config';
+import ContactForm from '@/components/contact/ContactForm';
 
 export default async function ContactPage() {
   const config = await getSiteConfig();
@@ -13,28 +14,8 @@ export default async function ContactPage() {
       <p className="text-text-secondary mb-10 ml-3">Đừng ngần ngại để lại lời nhắn, chúng tôi sẽ phản hồi sớm nhất.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <form className="flex flex-col gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1 text-foreground">Họ tên *</label>
-              <input type="text" className="w-full bg-background-secondary border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-primary" placeholder="Nhập họ tên của bạn" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-foreground">Email *</label>
-              <input type="email" className="w-full bg-background-secondary border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-primary" placeholder="Email của bạn" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-foreground">Tiêu đề</label>
-              <input type="text" className="w-full bg-background-secondary border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-primary" placeholder="Bạn cần hỗ trợ gì?" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-foreground">Nội dung *</label>
-              <textarea rows={5} className="w-full bg-background-secondary border border-border rounded-lg p-3 text-foreground focus:outline-none focus:border-primary resize-none" placeholder="Chi tiết lời nhắn..." required></textarea>
-            </div>
-            <button type="submit" className="btn bg-primary hover:bg-primary-hover text-black font-bold w-full py-3 rounded-lg mt-2 transition-colors">
-              GỬI TIN NHẮN
-            </button>
-          </form>
+        <div className="relative">
+          <ContactForm />
         </div>
 
         <div className="flex flex-col gap-8">

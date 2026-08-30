@@ -7,9 +7,11 @@ import { Search, Mail, Shield, ChevronDown, Menu, Moon, Sun } from 'lucide-react
 
 type HeaderProps = {
   logoUrl?: string;
+  ctaHref?: string;
+  ctaText?: string;
 };
 
-export default function Header({ logoUrl }: HeaderProps) {
+export default function Header({ logoUrl, ctaHref = '/lien-he', ctaText = 'ĐĂNG KÝ NGAY' }: HeaderProps) {
   const [theme, setTheme] = useState('light');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -88,9 +90,14 @@ export default function Header({ logoUrl }: HeaderProps) {
             {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
 
-          <Link href="/dang-ky" className="hidden md:inline-flex btn btn-primary btn-sm rounded-full gap-2 text-background font-semibold">
-            <Mail className="w-4 h-4" /> ĐĂNG KÝ NGAY
-          </Link>
+          <a
+            href={ctaHref}
+            target={ctaHref.startsWith('http') ? '_blank' : undefined}
+            rel={ctaHref.startsWith('http') ? 'nofollow sponsored noopener' : undefined}
+            className="hidden md:inline-flex btn btn-primary btn-sm rounded-full gap-2 text-background font-semibold"
+          >
+            <Mail className="w-4 h-4" /> {ctaText}
+          </a>
 
           <button className="md:hidden text-text-secondary" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Menu className="w-6 h-6" />
@@ -106,9 +113,15 @@ export default function Header({ logoUrl }: HeaderProps) {
             <Link href="/san-giao-dich" className={`text-lg font-medium py-2 border-b border-border ${pathname.startsWith('/san-giao-dich') ? 'text-accent' : 'text-foreground'}`} onClick={() => setMobileMenuOpen(false)}>Sàn giao dịch</Link>
             <Link href="/kien-thuc" className={`text-lg font-medium py-2 border-b border-border ${pathname.startsWith('/kien-thuc') ? 'text-accent' : 'text-foreground'}`} onClick={() => setMobileMenuOpen(false)}>Kiến thức</Link>
             <Link href="/lien-he" className={`text-lg font-medium py-2 border-b border-border ${pathname === '/lien-he' ? 'text-accent' : 'text-foreground'}`} onClick={() => setMobileMenuOpen(false)}>Liên hệ</Link>
-            <Link href="/dang-ky" className="btn btn-primary w-full mt-4 justify-center gap-2">
-              <Mail className="w-5 h-5" /> Đăng ký nhận tin
-            </Link>
+            <a
+              href={ctaHref}
+              target={ctaHref.startsWith('http') ? '_blank' : undefined}
+              rel={ctaHref.startsWith('http') ? 'nofollow sponsored noopener' : undefined}
+              className="btn btn-primary w-full mt-4 justify-center gap-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Mail className="w-5 h-5" /> {ctaText}
+            </a>
           </div>
         </div>
       )}

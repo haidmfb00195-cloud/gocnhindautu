@@ -145,7 +145,7 @@ export default function QuillEditor({ name, defaultValue = '', placeholder }: Qu
     () => ({
       toolbar: {
         container: [
-          [{ header: [2, 3, 4, false] }],
+          [{ header: [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline', 'strike'],
           [{ list: 'ordered' }, { list: 'bullet' }],
           ['blockquote', 'code-block'],

@@ -1,11 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Shield, Send } from 'lucide-react';
+import { Shield, Send, Phone, Mail, MapPin } from 'lucide-react';
 import type { SiteConfig } from '@/lib/site-config';
 
-type FooterProps = Pick<SiteConfig, 'logo_url' | 'facebook_url' | 'zalo_url'>;
+type FooterProps = Pick<
+  SiteConfig,
+  'logo_url' | 'facebook_url' | 'zalo_url' | 'contact_phone' | 'contact_email' | 'contact_address'
+>;
 
-export default function Footer({ logo_url, facebook_url, zalo_url }: FooterProps) {
+export default function Footer({
+  logo_url,
+  facebook_url,
+  zalo_url,
+  contact_phone,
+  contact_email,
+  contact_address,
+}: FooterProps) {
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-border bg-background-secondary py-12 text-sm">
@@ -47,24 +57,23 @@ export default function Footer({ logo_url, facebook_url, zalo_url }: FooterProps
               ) : null}
             </div>
           </div>
-          
+
           <div>
             <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Về chúng tôi</h3>
             <ul className="space-y-3">
-              <li><Link href="/gioi-thieu" className="text-text-secondary hover:text-primary transition-colors">Giới thiệu</Link></li>
-              <li><Link href="/tam-nhin" className="text-text-secondary hover:text-primary transition-colors">Tầm nhìn & Sứ mệnh</Link></li>
-              <li><Link href="/chinh-sach" className="text-text-secondary hover:text-primary transition-colors">Chính sách bảo mật</Link></li>
+              <li><Link href="/ve-chung-toi" className="text-text-secondary hover:text-primary transition-colors">Giới thiệu</Link></li>
               <li><Link href="/lien-he" className="text-text-secondary hover:text-primary transition-colors">Liên hệ</Link></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Kiến thức</h3>
+            <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Nội dung</h3>
             <ul className="space-y-3">
-              <li><Link href="/kien-thuc/forex-co-ban" className="text-text-secondary hover:text-primary transition-colors">Forex cơ bản</Link></li>
-              <li><Link href="/kien-thuc/phan-tich-ky-thuat" className="text-text-secondary hover:text-primary transition-colors">Phân tích kỹ thuật</Link></li>
-              <li><Link href="/kien-thuc/phan-tich-co-ban" className="text-text-secondary hover:text-primary transition-colors">Phân tích cơ bản</Link></li>
-              <li><Link href="/kien-thuc/quan-ly-rui-ro" className="text-text-secondary hover:text-primary transition-colors">Quản lý rủi ro</Link></li>
+              <li><Link href="/kien-thuc" className="text-text-secondary hover:text-primary transition-colors">Kiến thức</Link></li>
+              <li><Link href="/trade-quy" className="text-text-secondary hover:text-primary transition-colors">Trade quỹ</Link></li>
+              <li><Link href="/san-giao-dich" className="text-text-secondary hover:text-primary transition-colors">Sàn giao dịch</Link></li>
+              <li><Link href="/so-sanh" className="text-text-secondary hover:text-primary transition-colors">So sánh sàn</Link></li>
+              <li><Link href="/khoa-hoc" className="text-text-secondary hover:text-primary transition-colors">Khóa học</Link></li>
             </ul>
           </div>
 
@@ -72,19 +81,33 @@ export default function Footer({ logo_url, facebook_url, zalo_url }: FooterProps
             <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Công cụ</h3>
             <ul className="space-y-3">
               <li><Link href="/cong-cu" className="text-text-secondary hover:text-primary transition-colors">Tất cả công cụ</Link></li>
-              <li><Link href="/cong-cu/calculator" className="text-text-secondary hover:text-primary transition-colors">Calculator</Link></li>
-              <li><Link href="/cong-cu/compare" className="text-text-secondary hover:text-primary transition-colors">Compare Tool</Link></li>
-              <li><Link href="/cong-cu/economic-calendar" className="text-text-secondary hover:text-primary transition-colors">Economic Calendar</Link></li>
+              <li><Link href="/cong-cu/pip-calculator" className="text-text-secondary hover:text-primary transition-colors">Pip Calculator</Link></li>
+              <li><Link href="/cong-cu/lot-calculator" className="text-text-secondary hover:text-primary transition-colors">Lot Calculator</Link></li>
+              <li><Link href="/cong-cu/risk-reward" className="text-text-secondary hover:text-primary transition-colors">Risk/Reward Calculator</Link></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Prop Firm</h3>
+            <h3 className="font-semibold text-foreground uppercase tracking-wider mb-4 text-xs">Liên hệ</h3>
             <ul className="space-y-3">
-              <li><Link href="/prop-firm/review" className="text-text-secondary hover:text-primary transition-colors">Review Prop Firm</Link></li>
-              <li><Link href="/prop-firm/compare" className="text-text-secondary hover:text-primary transition-colors">Compare & Lựa chọn</Link></li>
-              <li><Link href="/prop-firm/so-sanh" className="text-text-secondary hover:text-primary transition-colors">So sánh Prop Firm</Link></li>
-              <li><Link href="/prop-firm/huong-dan" className="text-text-secondary hover:text-primary transition-colors">Hướng dẫn pass challenge</Link></li>
+              {contact_phone && (
+                <li className="flex items-start gap-2 text-text-secondary">
+                  <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                  <a href={`tel:${contact_phone.replace(/\s/g, '')}`} className="hover:text-primary transition-colors">{contact_phone}</a>
+                </li>
+              )}
+              {contact_email && (
+                <li className="flex items-start gap-2 text-text-secondary">
+                  <Mail className="w-4 h-4 mt-0.5 shrink-0" />
+                  <a href={`mailto:${contact_email}`} className="hover:text-primary transition-colors break-all">{contact_email}</a>
+                </li>
+              )}
+              {contact_address && (
+                <li className="flex items-start gap-2 text-text-secondary">
+                  <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+                  <span>{contact_address}</span>
+                </li>
+              )}
             </ul>
           </div>
         </div>

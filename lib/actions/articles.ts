@@ -30,7 +30,7 @@ async function requireAdmin() {
 function sanitizeArticleHtml(rawHtml: string): string {
   const cleaned = stripZeroWidth(rawHtml);
   return DOMPurify.sanitize(cleaned, {
-    ALLOWED_TAGS: ['h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
+    ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','ul','ol','li','blockquote',
                    'strong','em','a','code','pre','img','table','thead','tbody',
                    'tr','td','th','br','hr','figure','figcaption'],
     ALLOWED_ATTR: ['href','src','alt','class','id','target','rel','title'],

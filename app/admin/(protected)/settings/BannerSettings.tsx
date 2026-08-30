@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 type Banner = {
   id: string;
-  slug: string;
+  placement: string | null;
   title: string;
   subtitle: string | null;
   affiliate_link: string;
@@ -14,8 +14,41 @@ type Banner = {
   sort_order: number;
 };
 
+// 3 vị trí cố định trên site. Chọn 1 vị trí ở đây, banner sẽ tự hiện đúng chỗ đó
+// trên website — không cần biết slug/code kỹ thuật gì cả.
+const PLACEMENTS: { value: string; label: string; hint: string; singleton: boolean }[] = [
+  {
+    value: 'header_cta',
+    label: 'Nút CTA góc phải Header',
+    hint: 'Nút "ĐĂNG KÝ NGAY" luôn hiện trên mọi trang, góc trên bên phải.',
+    singleton: true,
+  },
+  {
+    value: 'home_horizontal',
+    label: 'Thanh ngang giữa trang chủ',
+    hint: 'Thanh đen nằm ngang bên dưới bài viết nổi bật ở trang chủ.',
+    singleton: true,
+  },
+  {
+    value: 'homepage_grid',
+    label: 'Lưới "Quỹ & Sàn giao dịch nổi bật"',
+    hint: 'Có thể thêm nhiều banner cùng lúc ở đây (mỗi banner 1 card trong lưới), dùng "Thứ tự hiển thị" để sắp xếp.',
+    singleton: false,
+  },
+  {
+    value: 'sidebar_category',
+    label: 'Sidebar trang Trade quỹ / Sàn giao dịch',
+    hint: 'Card banner bên phải danh sách bài viết ở trang Trade quỹ và Sàn giao dịch.',
+    singleton: true,
+  },
+];
+
+function placementLabel(value: string | null) {
+  return PLACEMENTS.find((p) => p.value === value)?.label ?? 'Chưa gán vị trí';
+}
+
 const emptyBanner: Omit<Banner, 'id'> = {
-  slug: '',
+  placement: '',
   title: '',
   subtitle: '',
   affiliate_link: '',
@@ -71,6 +104,7 @@ export function BannerSettings() {
       alert(d.error ?? 'Lưu thất bại');
     } else {
       setEditingId(null);
+      await loadBanners(); // tải lại để thấy banner cũ cùng vị trí đã tự tắt (nếu có)
     }
   }
 
@@ -110,8 +144,8 @@ export function BannerSettings() {
   }
 
   async function createBanner() {
-    if (!newBanner.slug || !newBanner.title || !newBanner.affiliate_link) {
-      alert('Vui lòng điền Slug, Tiêu đề và Link affiliate');
+    if (!newBanner.placement || !newBanner.title || !newBanner.affiliate_link) {
+      alert('Vui lòng chọn Vị trí hiển thị, và điền Tiêu đề, Link affiliate');
       return;
     }
     setCreating(true);
@@ -136,7 +170,9 @@ export function BannerSettings() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-white">Banner Affiliate</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Quản lý các banner quảng cáo — thay đổi sẽ tự cập nhật trên site.</p>
+          <p className="text-sm text-gray-500 mt-0.5">
+            Chọn vị trí hiển thị cho từng banner — thay đổi sẽ tự cập nhật trên site.
+          </p>
         </div>
         <button
           onClick={() => setShowNewForm((v) => !v)}
@@ -154,7 +190,6 @@ export function BannerSettings() {
             data={newBanner}
             onChange={(patch) => setNewBanner((b) => ({ ...b, ...patch }))}
             onQrUpload={handleNewQrUpload}
-            isNew
           />
           <button
             onClick={createBanner}
@@ -176,7 +211,7 @@ export function BannerSettings() {
           <div className="flex items-start justify-between mb-3">
             <div>
               <p className="text-sm font-medium text-white">{b.title}</p>
-              <p className="text-xs text-emerald-400 font-mono mt-0.5">{b.slug}</p>
+              <p className="text-xs text-emerald-400 mt-0.5">{placementLabel(b.placement)}</p>
             </div>
             <div className="flex items-center gap-2">
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${b.is_active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-gray-700 text-gray-400'}`}>
@@ -227,26 +262,34 @@ function BannerForm({
   data,
   onChange,
   onQrUpload,
-  isNew = false,
 }: {
   data: any;
   onChange: (patch: Partial<BannerData>) => void;
   onQrUpload: (file: File) => void;
-  isNew?: boolean;
 }) {
+  const selected = PLACEMENTS.find((p) => p.value === data.placement);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {isNew && (
-        <div>
-          <label className="block text-xs text-gray-400 mb-1">Slug <span className="text-red-400">*</span></label>
-          <input
-            className="w-full rounded-lg bg-black/30 border border-gray-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
-            value={data.slug ?? ''}
-            onChange={(e) => onChange({ slug: e.target.value })}
-            placeholder="ftmo-sidebar"
-          />
-        </div>
-      )}
+      <div className="md:col-span-2">
+        <label className="block text-xs text-gray-400 mb-1">Vị trí hiển thị <span className="text-red-400">*</span></label>
+        <select
+          className="w-full rounded-lg bg-black/30 border border-gray-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+          value={data.placement ?? ''}
+          onChange={(e) => onChange({ placement: e.target.value })}
+        >
+          <option value="" disabled>— Chọn vị trí —</option>
+          {PLACEMENTS.map((p) => (
+            <option key={p.value} value={p.value}>{p.label}</option>
+          ))}
+        </select>
+        {selected && (
+          <p className="text-xs text-gray-500 mt-1">
+            {selected.hint}
+            {selected.singleton && ' Bật banner này sẽ tự động tắt banner khác đang ở cùng vị trí.'}
+          </p>
+        )}
+      </div>
       <div>
         <label className="block text-xs text-gray-400 mb-1">Tiêu đề <span className="text-red-400">*</span></label>
         <input
@@ -292,24 +335,27 @@ function BannerForm({
           placeholder="ĐĂNG KÝ NGAY"
         />
       </div>
-      <div>
-        <label className="block text-xs text-gray-400 mb-1">Thứ tự hiển thị</label>
-        <input
-          type="number"
-          className="w-full rounded-lg bg-black/30 border border-gray-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
-          value={data.sort_order ?? 0}
-          onChange={(e) => onChange({ sort_order: parseInt(e.target.value, 10) || 0 })}
-        />
-      </div>
+      {data.placement === 'homepage_grid' && (
+        <div>
+          <label className="block text-xs text-gray-400 mb-1">Thứ tự hiển thị</label>
+          <input
+            type="number"
+            className="w-full rounded-lg bg-black/30 border border-gray-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+            value={data.sort_order ?? 0}
+            onChange={(e) => onChange({ sort_order: parseInt(e.target.value, 10) || 0 })}
+          />
+          <p className="text-xs text-gray-500 mt-1">Số nhỏ hơn hiện trước. Chỉ áp dụng cho lưới nhiều banner.</p>
+        </div>
+      )}
       <div className="flex items-center gap-3 pt-5">
         <input
-          id={`active-${data.slug}`}
+          id={`active-${data.id ?? 'new'}`}
           type="checkbox"
           checked={data.is_active ?? true}
           onChange={(e) => onChange({ is_active: e.target.checked })}
           className="w-4 h-4 rounded accent-emerald-500"
         />
-        <label htmlFor={`active-${data.slug}`} className="text-sm text-gray-300 cursor-pointer">
+        <label htmlFor={`active-${data.id ?? 'new'}`} className="text-sm text-gray-300 cursor-pointer">
           Hiển thị trên site
         </label>
       </div>

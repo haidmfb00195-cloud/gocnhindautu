@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/admin/', '/admin/*', '/api/'],
       },
     ],
-    sitemap: 'https://gocnhindautu.com/sitemap.xml',
-    host: 'https://gocnhindautu.com',
+    sitemap: 'https://www.gocnhindautu.com/sitemap.xml',
+    host: 'https://www.gocnhindautu.com',
   };
 }

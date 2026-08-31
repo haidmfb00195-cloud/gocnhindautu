@@ -14,7 +14,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://gocnhindautu.com'),
+  metadataBase: new URL('https://www.gocnhindautu.com'),
   title: {
     default: 'Góc Nhìn Đầu Tư — Kiến thức Trading & Phân tích Forex',
     template: '%s | Góc Nhìn Đầu Tư',

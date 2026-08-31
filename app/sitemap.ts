@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/server';
 
-const BASE_URL = 'https://gocnhindautu.com';
+const BASE_URL = 'https://www.gocnhindautu.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = createClient();

@@ -360,10 +360,12 @@ function BannerForm({
         </label>
       </div>
       <div className="md:col-span-2">
-        <label className="block text-xs text-gray-400 mb-1">QR Code</label>
+        <label className="block text-xs text-gray-400 mb-1">
+          {data.placement === 'homepage_grid' ? 'Logo' : 'QR Code'}
+        </label>
         <div className="flex items-center gap-4">
           {data.qr_image_url && (
-            <img src={data.qr_image_url} alt="QR" className="w-16 h-16 rounded bg-white object-contain border border-gray-600" />
+            <img src={data.qr_image_url} alt={data.placement === 'homepage_grid' ? 'Logo' : 'QR'} className="w-16 h-16 rounded bg-white object-contain border border-gray-600" />
           )}
           <input
             type="file"
@@ -372,6 +374,9 @@ function BannerForm({
             onChange={(e) => e.target.files?.[0] && onQrUpload(e.target.files[0])}
           />
         </div>
+        {data.placement === 'homepage_grid' && (
+          <p className="text-xs text-gray-500 mt-1">Nên dùng ảnh logo nền trong suốt (PNG) để hiển thị đẹp trong lưới.</p>
+        )}
       </div>
     </div>
   );

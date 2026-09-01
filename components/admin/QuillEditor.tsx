@@ -190,7 +190,7 @@ export default function QuillEditor({ name, defaultValue = '', placeholder }: Qu
         onChange={handleChange}
         modules={modules}
         placeholder={placeholder}
-        className="[&_.ql-toolbar]:rounded-t-lg [&_.ql-toolbar]:border-gray-700 [&_.ql-toolbar]:bg-gray-900 [&_.ql-container]:rounded-b-lg [&_.ql-container]:border-gray-700 [&_.ql-container]:bg-gray-800 [&_.ql-editor]:min-h-[400px] [&_.ql-editor]:text-white [&_.ql-picker-label]:text-gray-300 [&_.ql-stroke]:stroke-gray-400 [&_.ql-fill]:fill-gray-400"
+        className="[&_.ql-toolbar]:sticky [&_.ql-toolbar]:top-0 [&_.ql-toolbar]:z-20 [&_.ql-toolbar]:rounded-t-lg [&_.ql-toolbar]:border-gray-700 [&_.ql-toolbar]:bg-gray-900 [&_.ql-container]:rounded-b-lg [&_.ql-container]:border-gray-700 [&_.ql-container]:bg-gray-800 [&_.ql-editor]:min-h-[400px] [&_.ql-editor]:text-white [&_.ql-picker-label]:text-gray-300 [&_.ql-stroke]:stroke-gray-400 [&_.ql-fill]:fill-gray-400"
       />
 
       {/* Hidden field — this is what the Server Action actually reads on submit */}

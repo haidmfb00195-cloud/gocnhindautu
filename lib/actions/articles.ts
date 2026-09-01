@@ -2,7 +2,7 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server';
 import { uploadToR2, deleteFromR2, makeArticleKey } from '@/lib/r2';
-import { triggerRevalidate, logAdminAction } from '@/lib/actions/revalidate';
+import { logAdminAction } from '@/lib/actions/revalidate';
 import { stripZeroWidth } from '@/lib/utils/text';
 import {
   getArticlePublicPath,
@@ -11,6 +11,7 @@ import {
 } from '@/lib/constants/article-verticals';
 import DOMPurify from 'isomorphic-dompurify';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 async function requireAdmin() {
   const supabase = createClient();
@@ -42,13 +43,14 @@ async function revalidateArticlePaths(
   slug: string,
   categorySlug?: string | null
 ) {
+  // Gọi thẳng API revalidate nội bộ của Next.js — không qua HTTP request ra ngoài.
+  // Trước đây dùng triggerRevalidate() gửi request tới chính domain của site, gây
+  // chậm/timeout khi domain có redirect (apex -> www) hoặc khi chạy trên serverless.
   const publicPath = getArticlePublicPath(vertical, slug, categorySlug);
-  await Promise.all([
-    triggerRevalidate(publicPath),
-    triggerRevalidate(`/${vertical}`, 'layout'),
-    triggerRevalidate('/kien-thuc', 'layout'),
-    triggerRevalidate('/', 'layout'),
-  ]);
+  revalidatePath(publicPath);
+  revalidatePath(`/${vertical}`, 'layout');
+  revalidatePath('/kien-thuc', 'layout');
+  revalidatePath('/', 'layout');
 }
 
 function revalidateAdminList(vertical?: ArticleVertical) {
@@ -125,6 +127,7 @@ export async function createArticleAction(formData: FormData) {
 
   if (vertical && isArticleVertical(vertical)) {
     revalidateAdminList(vertical);
+    redirect(`/admin/bai-viet/${vertical}`);
   }
 
   return { success: true, id: article.id };
@@ -203,6 +206,7 @@ export async function updateArticleAction(formData: FormData) {
   if (vertical && isArticleVertical(vertical)) {
     await revalidateArticlePaths(vertical, slug, category?.slug);
     revalidateAdminList(vertical);
+    redirect(`/admin/bai-viet/${vertical}`);
   }
 
   return { success: true };

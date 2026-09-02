@@ -35,7 +35,6 @@ interface QuillEditorProps {
 export default function QuillEditor({ name, defaultValue = '', placeholder }: QuillEditorProps) {
   const [html, setHtml] = useState(defaultValue);
   const quillRef = useRef<ReactQuillType>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const savedRangeRef = useRef<{ index: number; length: number } | null>(null);
 
@@ -142,32 +141,6 @@ export default function QuillEditor({ name, defaultValue = '', placeholder }: Qu
     setLinkModalOpen(false);
   };
 
-  // Ép cứng thanh công cụ dính khi cuộn bằng JS trực tiếp lên DOM — không phụ thuộc
-  // vào việc class CSS có bị cache trình duyệt/CDN hay conflict thứ tự nạp file hay không.
-  useEffect(() => {
-    const container = wrapperRef.current;
-    if (!container) return;
-
-    function applySticky() {
-      const toolbar = container!.querySelector<HTMLElement>('.ql-toolbar');
-      if (!toolbar) return false;
-      toolbar.style.position = 'sticky';
-      toolbar.style.top = '0px';
-      toolbar.style.zIndex = '20';
-      return true;
-    }
-
-    if (applySticky()) return;
-
-    // ReactQuill nạp bất đồng bộ (dynamic import), nên .ql-toolbar có thể chưa
-    // tồn tại ngay lần render đầu — theo dõi tới khi nó xuất hiện trong DOM.
-    const observer = new MutationObserver(() => {
-      if (applySticky()) observer.disconnect();
-    });
-    observer.observe(container, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, []);
-
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -188,7 +161,7 @@ export default function QuillEditor({ name, defaultValue = '', placeholder }: Qu
   );
 
   return (
-    <div ref={wrapperRef}>
+    <div>
       <input
         ref={fileInputRef}
         type="file"
@@ -217,7 +190,7 @@ export default function QuillEditor({ name, defaultValue = '', placeholder }: Qu
         onChange={handleChange}
         modules={modules}
         placeholder={placeholder}
-        className="[&_.ql-toolbar]:sticky [&_.ql-toolbar]:top-0 [&_.ql-toolbar]:z-20 [&_.ql-toolbar]:rounded-t-lg [&_.ql-toolbar]:border-gray-700 [&_.ql-toolbar]:bg-gray-900 [&_.ql-container]:rounded-b-lg [&_.ql-container]:border-gray-700 [&_.ql-container]:bg-gray-800 [&_.ql-editor]:min-h-[400px] [&_.ql-editor]:text-white [&_.ql-picker-label]:text-gray-300 [&_.ql-stroke]:stroke-gray-400 [&_.ql-fill]:fill-gray-400"
+        className="[&_.ql-toolbar]:rounded-t-lg [&_.ql-toolbar]:border-gray-700 [&_.ql-toolbar]:bg-gray-900 [&_.ql-container]:rounded-b-lg [&_.ql-container]:border-gray-700 [&_.ql-container]:bg-gray-800 [&_.ql-editor]:h-[60vh] [&_.ql-editor]:overflow-y-auto [&_.ql-editor]:text-white [&_.ql-picker-label]:text-gray-300 [&_.ql-stroke]:stroke-gray-400 [&_.ql-fill]:fill-gray-400"
       />
 
       {/* Hidden field — this is what the Server Action actually reads on submit */}
